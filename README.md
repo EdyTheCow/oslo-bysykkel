@@ -56,7 +56,7 @@ If container is launched on a external server, SSH tunnel can be used to access 
 ### Prod enviroment
 Production enviroment uses docker image built on top of Nginx using Github Actions. Whenever there's a change in the repository, a new updated image is built. Watchtower can be used to automate the fetching of new docker images in prod enviroment to automatically push updates. The image can be found in the repository at `Dockerfile`. Alternatively the application could be also run from any enviroment using `ghcr.io/edythecow/oslo-bysykkel:master` image, which includes built and ready to deploy app.
 
-Traefik reverse proxy will automatically generated the certificates using Let's Encrypt. Additional certificate resolvers can be added, such as Cloudflare by following Traefik docs: https://doc.traefik.io/traefik/https/acme/#providers
+Traefik reverse proxy will automatically generate the certificates using Let's Encrypt. Additional certificate resolvers can be added, such as Cloudflare by following Traefik docs: https://doc.traefik.io/traefik/https/acme/#providers
 
 <b>Change enviroment variables</b><br />
 Navigate to `prod-env/compose/.env` file and change the domain variable. Available variables:
