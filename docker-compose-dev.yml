@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+
+  dev:
+    image: node:16
+    working_dir: /code
+    network_mode: host
+    command: sh -c "npm install -g pnpm && npm run dev"
+    volumes:
+      - ./:/code
+    labels:
+      - "traefik.enable=false"
