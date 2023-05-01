@@ -1,5 +1,5 @@
 # Pull node alpine and use it to build the application
-FROM node:16-alpine as builder
+FROM node:16 as builder
 
 # Set a working directory, copy application files and install packages
 WORKDIR /app
