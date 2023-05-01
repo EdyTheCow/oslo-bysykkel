@@ -44,8 +44,9 @@ git clone https://github.com/EdyTheCow/oslo-bysykkel.git
 
 ### Dev enviroment
 <b>Launch dev preview container</b><br />
+Navigate to `dev-env` and run:
 ```
-docker compose -f docker-compose-dev.yml up
+docker compose up
 ```
 <b>Access the application</b><br />
 Navigate to `localhost:3333` in your browser to access the preview
