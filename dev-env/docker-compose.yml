@@ -6,8 +6,8 @@ services:
     image: node:16
     working_dir: /code
     network_mode: host
-    command: sh -c "npm install -g pnpm && npm run dev"
+    command: sh -c "npm install -g pnpm && pnpm i && npm run dev"
     volumes:
-      - ./:/code
+      - ..:/code
     labels:
       - "traefik.enable=false"
