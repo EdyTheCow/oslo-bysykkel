@@ -34,8 +34,8 @@ npm install -g pnpm && npm run dev
 Navigate to `localhost:3333` in your browser to access the preview
 
 ## Deploying using Docker Compose
-- The prod enviroment uses Traefik as reverse proxy to provide certificates and Nginx as web server
-- The dev enviroment launches into dev preview for rapid developement
+- The prod environment uses Traefik as reverse proxy to provide certificates and Nginx as web server
+- The dev environment launches into dev preview for rapid development
 
 <b>Clone repository</b><br />
 ```
@@ -53,13 +53,13 @@ Navigate to `localhost:3333` in your browser to access the preview
 
 If container is launched on a external server, SSH tunnel can be used to access the dev preview. Easiest way to do this is to set network to host so you're accessing host locally rather than container. That way you don't have to worry about container changing IP.
 
-### Prod enviroment
-Production enviroment uses docker image built on top of Nginx using Github Actions. Whenever there's a change in the repository, a new updated image is built. Watchtower can be used to automate the fetching of new docker images in prod enviroment to automatically push updates. The image can be found in the repository at `Dockerfile`. Alternatively the application could be also run from any enviroment using `ghcr.io/edythecow/oslo-bysykkel:master` image, which includes built and ready to deploy app.
+### Prod environment
+Production environment uses docker image built on top of Nginx using Github Actions. Whenever there's a change in the repository, a new updated image is built. Watchtower can be used to automate the fetching of new docker images in prod environment to automatically push updates. The image can be found in the repository at `Dockerfile`. Alternatively the application could be also run from any environment using `ghcr.io/edythecow/oslo-bysykkel:master` image, which includes built and ready to deploy app.
 
 Traefik reverse proxy will automatically generate the certificates using Let's Encrypt. Additional certificate resolvers can be added, such as Cloudflare by following Traefik docs: https://doc.traefik.io/traefik/https/acme/#providers
 
 <b>Change enviroment variables</b><br />
-Navigate to `prod-env/compose/.env` file and change the domain variable. Available variables:
+Navigate to `prod-env/compose/.env` file and change the `DOMAIN` variable. Available variables:
 | Variable | Example | Description |
 |-|:-:|-|
 | COMPOSE_PROJECT_NAME | prod_oslo-bysykkel | Docker compose container prefix |
@@ -75,7 +75,7 @@ sudo chmod 600 acme.json
 ```
 This file will store the generated certificates.
 
-<b>Launch prod enviroment</b><br />
+<b>Launch prod environment</b><br />
 Navigate to `prod-env/compose` and run:
 ```
 docker compose up
@@ -88,4 +88,4 @@ Navigate to the `DOMAIN` in your browser you have set earlier
 - Fork the repository
 - Navigate to https://www.netlify.com
 - Add new site, select the repository via GitHub account
-- Deploy, `netlify.toml` is included so no further configuration is required
+- Deploy the app, `netlify.toml` is included so no further configuration is required
