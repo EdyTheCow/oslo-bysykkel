@@ -1,26 +1,43 @@
 <script setup>
 
 import axios from 'axios';
-import { onMounted, reactive, computed } from 'vue';
+import { onMounted, reactive } from 'vue';
 
-const stationsDataResponse = reactive({
+const jsonStationsStatus = reactive({
   lastUpdated: null,
   stations: [],
 });
 
-const API_URL = 'https://bysykkel-api.edy.io';
+const jsonStationsInfo = reactive({
+  stations: [],
+});
+
+const API_URL = 'https://gbfs.urbansharing.com/oslobysykkel.no';
 
 // Fetch stations status and information, store data locally in browser. 
 // In the future this could be extened to offline usage of the application.
 // Set the required header as requested by APIs documentation.
 onMounted(async () => {
   try {
-    const response = await axios.get(`${API_URL}/stations`);
+    const response = await axios.get(`${API_URL}/station_status.json`, {
+      headers: { 'Client-Identifier': 'eddy-origoOppgave' },
+    });
     const data = response.data;
-    stationsDataResponse.stations = data.stations;
-    stationsDataResponse.lastUpdated = data.last_updated;
-    localStorage.setItem('stations_status', JSON.stringify(data.stations));
+    jsonStationsStatus.stations = data.data.stations;
+    jsonStationsStatus.lastUpdated = data.last_updated;
+    localStorage.setItem('stations_status', JSON.stringify(data.data.stations));
     localStorage.setItem('last_updated', data.last_updated);
+  } catch (error) {
+    console.error(error);
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/station_information.json`, {
+      headers: { 'Client-Identifier': 'eddy-origoOppgave' },
+    });
+    const data = response.data;
+    jsonStationsInfo.stations = data.data.stations;
+    localStorage.setItem('stations_info', JSON.stringify(data.data.stations));
   } catch (error) {
     console.error(error);
   }
@@ -29,7 +46,7 @@ onMounted(async () => {
 // Wait till unix time value is fetched, convert to human readable date and time. 
 // Displays when the data was last updated, could be especially useful for offline usage of the application. 
 const lastUpdatedDate = computed(() => {
-  const timestamp = stationsDataResponse.lastUpdated;
+  const timestamp = jsonStationsStatus.lastUpdated;
   return new Date(timestamp * 1000).toLocaleString('nb-NO', { timeZone: 'Europe/Oslo' });
 });
 
@@ -57,10 +74,12 @@ const lastUpdatedDate = computed(() => {
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                <tr v-for="station in stationsDataResponse.stations" :key="station.station_id" :stationId="station.station_id">
-                  <td class="name whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">{{ station.name }}</td>
-                  <td class="num_bikes whitespace-nowrap px-3 py-4 text-sm text-gray-700">{{ station.num_bikes_available }}</td>
-                  <td class="num_docks whitespace-nowrap px-3 py-4 text-sm text-gray-700">{{ station.num_docks_available }}</td>
+                <tr v-for="stationInfo in jsonStationsInfo.stations" :key="stationInfo.station_id">
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">{{ stationInfo.name }}</td>
+                  <template v-for="stationStatus in jsonStationsStatus.stations" :key="stationStatus.station_id" >
+                    <td v-if="stationInfo.station_id == stationStatus.station_id" class="whitespace-nowrap px-3 py-4 text-sm text-gray-700">{{ stationStatus.num_bikes_available }}</td>
+                    <td v-if="stationInfo.station_id == stationStatus.station_id" class="whitespace-nowrap px-3 py-4 text-sm text-gray-700">{{ stationStatus.num_docks_available }}</td>
+                  </template >
                 </tr>
               </tbody>
             </table>
